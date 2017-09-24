@@ -1,0 +1,63 @@
+{
+    "settings":{
+        "analysis":{
+            "analyzer":{
+                "ignore_accentuation": {
+                    "tokenizer": "keyword",
+                    "filter" : [
+                        "lowercase",
+                        "asciifolding"
+                    ]
+                }
+            }
+        }
+    },
+    "mappings": {
+        "triple": {
+            "properties": {
+                "subject": {
+                    "type": "nested",
+                    "include_in_parent": true,
+                    "properties": {
+                        "concept": {
+                            "type": "string",
+                            "analyzer": "ignore_accentuation"
+                        },
+                        "uri": {
+                            "type": "string",
+                            "analyzer": "ignore_accentuation"
+                        }
+                    }
+                },
+                "predicate": {
+                    "type": "nested",
+                    "include_in_parent": true,
+                    "properties": {
+                        "concept": {
+                            "type": "string",
+                            "analyzer": "ignore_accentuation"
+                        },
+                        "uri": {
+                            "type": "string",
+                            "analyzer": "ignore_accentuation"
+                        }
+                    }
+                },
+                "object": {
+                    "type": "nested",
+                    "include_in_parent": true,
+                    "properties": {
+                        "concept": {
+                            "type": "string",
+                            "analyzer": "ignore_accentuation"
+                        },
+                        "uri": {
+                            "type": "string",
+                            "analyzer": "ignore_accentuation"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
