@@ -4,6 +4,7 @@
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
 DBpedia datasets download at http://wiki.dbpedia.org/downloads-2016-10#datasets
+ElasticSearch version: 5.6.1
 """
 import json
 from elasticsearch import helpers as es_helper
