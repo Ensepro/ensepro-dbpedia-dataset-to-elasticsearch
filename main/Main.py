@@ -1,5 +1,5 @@
 """
-@project RDF2ElasticSearch
+@project DBpediaDataset2ElasticSearch
 @since 21/09/2017
 @author Alencar Rodrigo Hentges <alencarhentges@gmail.com>
 
@@ -91,9 +91,9 @@ def createInsertAction(triple):
 
 def createTriple(triple):
     return {
-        "sujeito": createElement(triple[0]),
-        "predicado": createElement(triple[1]),
-        "objeto": createElement(triple[2])
+        "subject": createElement(triple[0]),
+        "predicate": createElement(triple[1]),
+        "object": createElement(triple[2])
     }
 
 
