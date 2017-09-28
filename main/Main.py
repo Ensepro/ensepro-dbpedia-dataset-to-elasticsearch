@@ -172,7 +172,7 @@ def queriesTests():
     query = {
         "query":{
             "query_string":{
-                "query" : "subject.concept :('Astronomi', 'Aquiles') AND objeto.concept: ('Apolo', 'Sistema_Solar')",
+                "query" : "subject.concept :('Astronomi', 'Aquiles') AND object.concept: ('Apolo', 'Sistema_Solar')",
             }
         }
     }
