@@ -16,17 +16,30 @@ INDEX_NAME = "triples"
 INDEX_TYPE = "triple"
 
 INDEX_SETTINGS = {
+    "settings": {
+        "analysis": {
+            "analyzer": {
+                "lowercase": {
+                    "type": "standard",
+                    "filter": ["lowercase"]
+                },
+            }
+        }
+    },
     "mappings": {
         INDEX_TYPE: {
             "properties": {
                 "subject": {
                     "type": "text",
+                    "analyzer": "lowercase"
                 },
                 "predicate": {
                     "type": "text",
+                    "analyzer": "lowercase"
                 },
                 "object": {
                     "type": "text",
+                    "analyzer": "lowercase"
                 }
             }
         }
@@ -65,8 +78,8 @@ def loadTriples():
 
     with open(TRIPLE_FILE, "r", encoding="utf-8") as triples:
         triple_number = 0
-        number_triples_to_bulk = 10000
-        max_triples = 50000
+        number_triples_to_bulk = 20000
+        max_triples = 10000000
 
         for triple in triples:
             triple_number += 1
@@ -106,6 +119,7 @@ def queriesTests():
         triples.append(triple)
 
     to_file = {}
+    to_file["triples_size"] = len(triples)
     to_file["triples"] = triples
     to_file["time"] = {}
     to_file["time"]["seconds"] = seconds
@@ -122,5 +136,5 @@ es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
 # loadTriples()
 queriesTests()
 
-# count = es.count(index=INDEX_NAME, doc_type=DOC_TYPE, body={ "query": {"match_all" : { }}})
+# count = es.count(index=INDEX_NAME, doc_type=INDEX_TYPE, body={ "query": {"match_all" : { }}})
 # print(count)
