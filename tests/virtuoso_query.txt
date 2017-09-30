@@ -1,0 +1,6 @@
+select * where {{
+  ?s ?p ?o
+  filter(
+    regex(str(?s), "{}")
+  )
+}}

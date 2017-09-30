@@ -10,7 +10,7 @@ import json
 from elasticsearch import helpers as es_helper
 from elasticsearch import Elasticsearch
 
-# TRIPLE_FILE= "../files/_triples.txt"
+# TRIPLE_FILE= "../files/_#triples.txt"
 TRIPLE_FILE= "../files/100_triples.txt"
 
 INDEX_NAME = "triples"
