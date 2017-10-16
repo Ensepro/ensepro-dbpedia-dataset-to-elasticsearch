@@ -10,7 +10,7 @@ import json
 from elasticsearch import helpers as es_helper
 from elasticsearch import Elasticsearch
 
-TRIPLE_FILE= "../files/_#homepages_en.txt"
+TRIPLE_FILE= "/root/homepages_en.txt"
 INDEX_NAME = "triples"
 INDEX_TYPE = "triple"
 
@@ -30,15 +30,15 @@ INDEX_SETTINGS = {
             "properties": {
                 "subject": {
                     "type": "text",
-                    "analyzer": "lowercase"
+                    "analyzer": "whitespace"
                 },
                 "predicate": {
                     "type": "text",
-                    "analyzer": "lowercase"
+                    "analyzer": "whitespace"
                 },
                 "object": {
                     "type": "text",
-                    "analyzer": "lowercase"
+                    "analyzer": "whitespace"
                 }
             }
         }
@@ -82,7 +82,7 @@ class ElasticSearchTests(object):
             triple_number = 0
             number_triples_to_bulk = 10000
             max_triples = 1000000
-
+            print("Carregando triplas...")
             for triple in triples:
                 triple_number += 1
                 triple_ = self.__createTriple(triple.split(" "))
@@ -96,8 +96,8 @@ class ElasticSearchTests(object):
                 if (triple_number > max_triples):
                     break
 
-                print(str(triple_number) + "-" + str(triple_))
-
+                #print(str(triple_number) + "-" + str(triple_))
+        print("Carregadas "+str(triple_number)+" triplas!")
         if (len(actions) > 0):
             es_helper.bulk(self.es, actions)
 
@@ -112,7 +112,7 @@ class ElasticSearchTests(object):
 
     def createQuery(self):
         with open(self.words_file, "r", encoding="utf-8") as regex_file:
-            words = regex_file.read().lower().split("\n")
+            words = regex_file.read().replace("\n", "").split(";")
 
         with open(self.query_file, "r", encoding="utf-8") as query_file:
             query = query_file.read().replace("\n", " ")
@@ -158,7 +158,7 @@ class ElasticSearchTests(object):
             result_file.write(json.dumps(formatedResult, ensure_ascii=False, indent=4, sort_keys=False))
 
     def execute(self):
-        self.es = Elasticsearch([{'host': 'localhost', 'port': 9200}])
-        # self.__loadTriples()
+        self.es = Elasticsearch([{'host': '172.17.0.4', 'port': 9200}])
+        #self.__loadTriples()
         self.executeTest()
         print("elasticsearch done.")

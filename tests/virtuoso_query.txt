@@ -1,6 +1,6 @@
 select * where {{
   ?s ?p ?o
   filter(
-    regex(str(?s), "{}")
+    regex(str(?s), "({})")
   )
-}}
+}} limit 10000

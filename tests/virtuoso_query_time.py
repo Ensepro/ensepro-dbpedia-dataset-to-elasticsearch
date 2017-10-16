@@ -8,7 +8,7 @@ import json
 import datetime as dt
 from SPARQLWrapper import SPARQLWrapper, JSON
 
-IP = "127.0.0.1"
+IP = "172.17.0.3"
 PORT = "8890"
 PATH = "sparql"
 
@@ -24,13 +24,13 @@ class VirtuosoTests(object):
     def createRegex(self, words):
         regex = words[0]
         for word in words[1:]:
-            regex = "|" + word
+            regex += "|" + word
 
         return regex
 
     def createQuery(self):
         with open(self.words_file, "r", encoding="utf-8") as words_file:
-            words = words_file.read().split("\n")
+            words = words_file.read().replace("\n", "").split(";")
 
         with open(self.query_file, "r", encoding="utf-8") as file_query:
             query = file_query.read().replace("\n", " ")
@@ -80,6 +80,8 @@ class VirtuosoTests(object):
         query = self.createQuery()
         result = self.executeQuery(query)
         formatedResult = self.formatResults(result)
+
+        formatedResult["query"] = query
 
         with open(self.result_file, "w+", encoding="utf-8") as result_file:
             result_file.write(json.dumps(formatedResult, ensure_ascii=False, indent=4, sort_keys=False))
