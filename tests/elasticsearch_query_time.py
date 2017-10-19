@@ -54,6 +54,9 @@ class ElasticSearchTests(object):
 
     def __createElement(self, element: str):
         element = element[1:-1]  # remove '<' and '>' from string
+        split_point = element.rfind("/")
+        uri = element[:split_point]
+        concept = element[split_point + 1:]
         return element
 
     def __createInsertAction(self, triple):
@@ -159,6 +162,6 @@ class ElasticSearchTests(object):
 
     def execute(self):
         self.es = Elasticsearch([{'host': '172.17.0.4', 'port': 9200}])
-        #self.__loadTriples()
+        self.__loadTriples()
         self.executeTest()
         print("elasticsearch done.")

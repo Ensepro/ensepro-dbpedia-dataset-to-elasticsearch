@@ -16,43 +16,55 @@
         "triple": {
             "properties": {
                 "subject": {
-                    "type": "nested",
-                    "include_in_parent": true,
                     "properties": {
-                        "concept": {
-                            "type": "string",
+                        "original_text": {
+                            "type": "text"
+                        },
+                        "type": {
+                            "type": "text",
                             "analyzer": "ignore_accentuation"
                         },
                         "uri": {
-                            "type": "string",
+                            "type": "keyword"
+                        },
+                        "concept": {
+                            "type": "text",
                             "analyzer": "ignore_accentuation"
                         }
                     }
                 },
                 "predicate": {
-                    "type": "nested",
-                    "include_in_parent": true,
                     "properties": {
-                        "concept": {
-                            "type": "string",
+                        "original_text": {
+                            "type": "text"
+                        },
+                        "type": {
+                            "type": "text",
                             "analyzer": "ignore_accentuation"
                         },
                         "uri": {
-                            "type": "string",
+                            "type": "keyword"
+                        },
+                        "concept": {
+                            "type": "text",
                             "analyzer": "ignore_accentuation"
                         }
                     }
                 },
                 "object": {
-                    "type": "nested",
-                    "include_in_parent": true,
                     "properties": {
-                        "concept": {
-                            "type": "string",
+                        "original_text": {
+                            "type": "text"
+                        },
+                        "type": {
+                            "type": "text",
                             "analyzer": "ignore_accentuation"
                         },
                         "uri": {
-                            "type": "string",
+                            "type": "keyword"
+                        },
+                        "concept": {
+                            "type": "text",
                             "analyzer": "ignore_accentuation"
                         }
                     }
