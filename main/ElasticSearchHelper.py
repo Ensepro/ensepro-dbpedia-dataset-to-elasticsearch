@@ -20,6 +20,7 @@ class ElasticSearchHelper(object):
         self.should_use_canonical_word = should_use_canonical_word
 
     def _get_canonical_word(self, word: str):
+        word = word.replace("-", "_")
         if self.should_use_canonical_word:
             logger.debug("Buscando palavra canônica para palavra '{}'".format(word))
             canonical_word = PalavrasService.get_canonical_word(word)

@@ -16,7 +16,7 @@ SETTINGS = {}
 SETTINGS[INDEX_NAME] = "triples"
 SETTINGS[INDEX_TYPE] = "triple"
 SETTINGS[INDEX_SETTINGS] = "index_settings.json"
-SETTINGS[DATASET] = "../files/100_triples.txt"
+SETTINGS[DATASET] = "../files/persondata_pt_sample.ttl"
 SETTINGS[TRIPLES_TO_BULK] = 5000
 SETTINGS[MAX_TRIPLES] = 20000
 

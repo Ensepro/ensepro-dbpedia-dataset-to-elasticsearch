@@ -20,7 +20,9 @@ def _analyze(word: str):
 
 
 def get_canonical_word(word: str):
-    json_response = _analyze(word).json()
-    analyzed_word = json_response[-1]
-
-    return analyzed_word["palavraCanonica"]
+    response = _analyze(word)
+    if response.ok:
+        json_response = response.json()
+        analyzed_word = json_response[-1]
+        return analyzed_word["palavraCanonica"]
+    return word
