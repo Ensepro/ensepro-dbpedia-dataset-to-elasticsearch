@@ -6,23 +6,35 @@
 """
 
 from elasticsearch import helpers as es_helper
+from services import PalavrasService
 from main.Constants import *
-
 from main.Log import Log
 
-logger = Log("info")
+logger = Log("error")
+
 
 class ElasticSearchHelper(object):
-
-    def __init__(self, es, settings):
+    def __init__(self, es, settings, should_use_canonical_word):
         self.es = es
         self.settings = settings
+        self.should_use_canonical_word = should_use_canonical_word
 
-    def __createElementIRI(self, element):
+    def _get_canonical_word(self, word: str):
+        if self.should_use_canonical_word:
+            logger.debug("Buscando palavra canônica para palavra '{}'".format(word))
+            canonical_word = PalavrasService.get_canonical_word(word)
+            logger.debug("Palavra canônica buscada. {0} <-> {1}".format(word, canonical_word))
+            return canonical_word
+        return word
+
+    def _create_element_uri(self, element):
         element = element[1:-1]  # remove '<' and '>' from string
         split_point = element.rfind("/")
         uri = element[:split_point]
         concept = element[split_point + 1:]
+
+        # get canonical word if self.should_use_canonical_word == True
+        concept = self._get_canonical_word(concept)
 
         return {
             "original_text": element,
@@ -30,17 +42,19 @@ class ElasticSearchHelper(object):
             "uri": uri
         }
 
-    def __createElement(self, element: str):
+    def _create_element(self, element: str):
         if (element.startswith("<")):
-            return self.__createElementIRI(element)
+            return self._create_element_uri(element)
 
-            # return the value between the first \" and the last \".
+        # return the value between the first \" and the last \".
+        concept = element[element.find("\"") + 1:element.rfind("\"")]
+
         return {
             "original_text": element,
-            "concept": element[element.find("\"") + 1:element.rfind("\"")]
+            "concept": concept
         }
 
-    def __createInsertAction(self, triple):
+    def _create_insert_action(self, triple):
         return {
             "_op_type": 'index',
             "_index": self.settings[INDEX_NAME],
@@ -48,14 +62,24 @@ class ElasticSearchHelper(object):
             "_source": triple
         }
 
-    def __createTriple(self, triple):
+    def _create_triple(self, triple):
         return {
-            "subject": self.__createElement(triple[0]),
-            "predicate": self.__createElement(triple[1]),
-            "object": self.__createElement(triple[2])
+            "subject": self._create_element(triple[0]),
+            "predicate": self._create_element(triple[1]),
+            "object": self._create_element(triple[2])
         }
 
-    def loadTriples(self):
+    def _split_terms(self, tripleOriginal):
+        first_space = tripleOriginal.index(" ")
+        second_space = tripleOriginal[first_space + 1:].index(" ")
+
+        subject = tripleOriginal[:first_space]
+        predicate = tripleOriginal[first_space + 1:][:second_space]
+        object = tripleOriginal[first_space + 1:][second_space + 1:]
+
+        return [subject, predicate, object]
+
+    def load_triples(self):
         actions = []
 
         index_settings = open(self.settings[INDEX_SETTINGS]).read()
@@ -73,8 +97,8 @@ class ElasticSearchHelper(object):
             for triple in triples:
                 if (triple.startswith("#")):
                     continue
-                triple_ = self.__createTriple(triple.split(" "))
-                actions.append(self.__createInsertAction(triple_))
+                triple_ = self._create_triple(self._split_terms(triple))
+                actions.append(self._create_insert_action(triple_))
 
                 size = len(actions)
                 if (size >= self.settings[TRIPLES_TO_BULK]):
@@ -85,11 +109,10 @@ class ElasticSearchHelper(object):
                 if (triple_number > self.settings[MAX_TRIPLES]):
                     break
 
-                triple_number += 1
-
                 logger.debug("Tripla: id={triple_number} - {triple}".format(triple_number=triple_number, triple=str(triple_)))
 
+                triple_number += 1
 
-        logger.info("Carregadas {} triplas!".format(triple_number-1))
+        logger.info("Carregadas {} triplas!".format(triple_number - 1))
         if (len(actions) > 0):
             es_helper.bulk(self.es, actions)
