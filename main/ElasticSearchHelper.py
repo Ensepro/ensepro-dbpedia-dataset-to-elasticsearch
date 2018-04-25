@@ -10,14 +10,15 @@ from services import PalavrasService
 from main.Constants import *
 from main.Log import Log
 
-logger = Log("error")
+logger = Log("info")
 
 
 class ElasticSearchHelper(object):
-    def __init__(self, es, settings, should_use_canonical_word):
+    def __init__(self, es, settings, should_use_canonical_word=False, recreate_index=False):
         self.es = es
         self.settings = settings
         self.should_use_canonical_word = should_use_canonical_word
+        self.recreate_index = recreate_index
 
     def _get_canonical_word(self, word: str):
         word = word.replace("-", "_")
@@ -30,6 +31,7 @@ class ElasticSearchHelper(object):
 
     def _create_element_uri(self, element):
         element = element[1:-1]  # remove '<' and '>' from string
+        element = element.replace("> .", "")
         split_point = element.rfind("/")
         uri = element[:split_point]
         concept = element[split_point + 1:]
@@ -44,7 +46,7 @@ class ElasticSearchHelper(object):
         }
 
     def _create_element(self, element: str):
-        if (element.startswith("<")):
+        if "http" in element:
             return self._create_element_uri(element)
 
         # return the value between the first \" and the last \".
@@ -83,14 +85,15 @@ class ElasticSearchHelper(object):
     def load_triples(self):
         actions = []
 
-        index_settings = open(self.settings[INDEX_SETTINGS]).read()
+        if self.recreate_index:
+            index_settings = open(self.settings[INDEX_SETTINGS]).read()
 
-        # recreate index
-        logger.info("removendo indice \"{}\"".format(self.settings[INDEX_NAME]))
-        self.es.indices.delete(index=self.settings[INDEX_NAME], ignore=[400, 404])
+            # recreate index
+            logger.info("removendo indice \"{}\"".format(self.settings[INDEX_NAME]))
+            self.es.indices.delete(index=self.settings[INDEX_NAME], ignore=[400, 404])
 
-        logger.info("criando indice \"{}\"".format(self.settings[INDEX_NAME]))
-        self.es.indices.create(index=self.settings[INDEX_NAME], body=index_settings)
+            logger.info("criando indice \"{}\"".format(self.settings[INDEX_NAME]))
+            self.es.indices.create(index=self.settings[INDEX_NAME], body=index_settings)
 
         logger.info("iniciando a carega do dataset[{}]".format(self.settings[DATASET]))
         with open(self.settings[DATASET], "r", encoding="utf-8") as triples:
@@ -103,7 +106,7 @@ class ElasticSearchHelper(object):
 
                 size = len(actions)
                 if (size >= self.settings[TRIPLES_TO_BULK]):
-                    logger.debug("Executando bulk - {} triplas".format(self.settings[TRIPLES_TO_BULK]))
+                    logger.info("Executando bulk - {} triplas. total: {}".format(self.settings[TRIPLES_TO_BULK], triple_number))
                     es_helper.bulk(self.es, actions)
                     actions = []
 

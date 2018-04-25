@@ -13,7 +13,7 @@
         }
     },
     "mappings": {
-        "triple": {
+        "ensepro_tripla": {
             "properties": {
                 "subject": {
                     "properties": {
