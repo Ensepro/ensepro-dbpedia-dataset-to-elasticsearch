@@ -17,13 +17,13 @@ SETTINGS[INDEX_NAME] = "ensepro_triplas"
 SETTINGS[INDEX_TYPE] = "ensepro_tripla"
 SETTINGS[INDEX_SETTINGS] = "index_settings.json"
 SETTINGS[DATASET] = "../files/persondata_pt_sample.ttl"
-SETTINGS[TRIPLES_TO_BULK] = 5000
-SETTINGS[MAX_TRIPLES] = 20000
+SETTINGS[TRIPLES_TO_BULK] = 3000
+SETTINGS[MAX_TRIPLES] = 1000000
 
 
 ES = Elasticsearch([{'host': ES_HOST, 'port': ES_PORT}])
 
 
-es_helper = ElasticSearchHelper(ES, SETTINGS, False, False)
+es_helper = ElasticSearchHelper(ES, SETTINGS, False, True)
 
 es_helper.load_triples()

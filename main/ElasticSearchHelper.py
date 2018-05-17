@@ -40,21 +40,23 @@ class ElasticSearchHelper(object):
         concept = self._get_canonical_word(concept)
 
         return {
-            "original_text": element,
-            "concept": concept,
+            "texto_original": element,
+            "conceito": concept,
+            "ngram_conceito": concept,
             "uri": uri
         }
 
     def _create_element(self, element: str):
-        if "http" in element:
+        if "<http" == element[0:5]:
             return self._create_element_uri(element)
 
         # return the value between the first \" and the last \".
         concept = element[element.find("\"") + 1:element.rfind("\"")]
 
         return {
-            "original_text": element,
-            "concept": concept
+            "texto_original": element,
+            "conceito": concept,
+            "ngram_conceito": concept
         }
 
     def _create_insert_action(self, triple):
@@ -67,9 +69,9 @@ class ElasticSearchHelper(object):
 
     def _create_triple(self, triple):
         return {
-            "subject": self._create_element(triple[0]),
-            "predicate": self._create_element(triple[1]),
-            "object": self._create_element(triple[2])
+            "sujeito": self._create_element(triple[0]),
+            "predicado": self._create_element(triple[1]),
+            "objeto": self._create_element(triple[2])
         }
 
     def _split_terms(self, tripleOriginal):
