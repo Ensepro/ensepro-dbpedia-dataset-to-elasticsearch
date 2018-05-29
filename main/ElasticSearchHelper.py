@@ -109,7 +109,7 @@ class ElasticSearchHelper(object):
                 size = len(actions)
                 if (size >= self.settings[TRIPLES_TO_BULK]):
                     logger.info("Executando bulk - {} triplas. total: {}".format(self.settings[TRIPLES_TO_BULK], triple_number))
-                    es_helper.bulk(self.es, actions)
+                    es_helper.bulk(self.es, actions, request_timeout=60)
                     actions = []
 
                 if (triple_number > self.settings[MAX_TRIPLES]):
@@ -121,4 +121,4 @@ class ElasticSearchHelper(object):
 
         logger.info("Carregadas {} triplas!".format(triple_number - 1))
         if (len(actions) > 0):
-            es_helper.bulk(self.es, actions)
+            es_helper.bulk(self.es, actions, request_timeout=60)
