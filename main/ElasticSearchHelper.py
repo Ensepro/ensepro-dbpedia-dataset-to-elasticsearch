@@ -63,7 +63,7 @@ class ElasticSearchHelper(object):
         return {
             "_op_type": 'index',
             "_index": self.settings[INDEX_NAME],
-            "_type": self.settings[INDEX_TYPE],
+            # "_type": self.settings[INDEX_TYPE],
             "_source": triple
         }
 

@@ -1,5 +1,8 @@
 {
     "settings": {
+        "index": {
+            "max_ngram_diff": 30
+        },
         "analysis": {
             "analyzer": {
                 "ignore_accentuation": {
@@ -21,66 +24,80 @@
                 "ngram_conceito_tokenizer": {
                     "type": "ngram",
                     "min_gram": 3,
-                    "max_gram": 40,
+                    "max_gram": 30,
                     "token_chars": []
                 }
             }
         }
     },
     "mappings": {
-        "ensepro_tripla": {
-            "properties": {
-                "sujeito": {
-                    "properties": {
-                        "texto_original": {
-                            "type": "text"
-                        },
-                        "uri": {
-                            "type": "keyword"
-                        },
-                        "conceito": {
-                            "type": "text",
-                            "analyzer": "ignore_accentuation"
-                        },
-                        "ngram_conceito": {
-                            "type": "text",
-                            "analyzer": "ngram_ignore_accentuation"
+        "properties": {
+            "ensepro_tripla": {
+                "properties": {
+                    "sujeito": {
+                        "properties": {
+                            "texto_original": {
+                                "type": "text"
+                            },
+                            "uri": {
+                                "type": "keyword"
+                            },
+                            "conceito": {
+                                "type": "text",
+                                "analyzer": "ignore_accentuation",
+                                "search_analyzer": "ignore_accentuation",
+                                "search_quote_analyzer": "ignore_accentuation"
+                            },
+                            "ngram_conceito": {
+                                "type": "text",
+                                "analyzer": "ngram_ignore_accentuation",
+                                "search_analyzer": "ngram_ignore_accentuation",
+                                "search_quote_analyzer": "ngram_ignore_accentuation"
+                            }
                         }
-                    }
-                },
-                "predicado": {
-                    "properties": {
-                        "texto_original": {
-                            "type": "text"
-                        },
-                        "uri": {
-                            "type": "keyword"
-                        },
-                        "conceito": {
-                            "type": "text",
-                            "analyzer": "ignore_accentuation"
-                        },
-                        "ngram_conceito": {
-                            "type": "text",
-                            "analyzer": "ngram_ignore_accentuation"
+                    },
+                    "predicado": {
+                        "properties": {
+                            "texto_original": {
+                                "type": "text"
+                            },
+                            "uri": {
+                                "type": "keyword"
+                            },
+                            "conceito": {
+                                "type": "text",
+                                "analyzer": "ignore_accentuation",
+                                "search_analyzer": "ignore_accentuation",
+                                "search_quote_analyzer": "ignore_accentuation"
+                            },
+                            "ngram_conceito": {
+                                "type": "text",
+                                "analyzer": "ngram_ignore_accentuation",
+                                "search_analyzer": "ngram_ignore_accentuation",
+                                "search_quote_analyzer": "ngram_ignore_accentuation"
+                            }
                         }
-                    }
-                },
-                "objeto": {
-                    "properties": {
-                        "texto_original": {
-                            "type": "text"
-                        },
-                        "uri": {
-                            "type": "keyword"
-                        },
-                        "conceito": {
-                            "type": "text",
-                            "analyzer": "ignore_accentuation"
-                        },
-                        "ngram_conceito": {
-                            "type": "text",
-                            "analyzer": "ngram_ignore_accentuation"
+                    },
+                    "objeto": {
+                        "properties": {
+                            "texto_original": {
+                                "type": "text"
+                            },
+                            "uri": {
+                                "type": "keyword"
+                            },
+                            "conceito": {
+                                "type": "text",
+                                "analyzer": "ignore_accentuation",
+                                "search_analyzer": "ignore_accentuation",
+                                "search_quote_analyzer": "ignore_accentuation"
+                            },
+                            "ngram_conceito": {
+                                "type": "text",
+                                "analyzer": "ngram_ignore_accentuation",
+                                "search_analyzer": "ngram_ignore_accentuation",
+                                "search_quote_analyzer": "ngram_ignore_accentuation"
+                            }
                         }
                     }
                 }
