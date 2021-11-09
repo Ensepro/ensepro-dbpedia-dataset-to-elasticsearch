@@ -7,8 +7,8 @@
 
 from elasticsearch import helpers as es_helper
 from services import PalavrasService
-from main.Constants import *
-from main.Log import Log
+from Constants import *
+from Log import Log
 
 logger = Log("info")
 

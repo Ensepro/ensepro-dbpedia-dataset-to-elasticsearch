@@ -5,9 +5,9 @@
 
 """
 
-from main.Constants import *
+from Constants import *
 from elasticsearch import Elasticsearch
-from main.ElasticSearchHelper import ElasticSearchHelper
+from ElasticSearchHelper import ElasticSearchHelper
 import os
 
 ES_HOST = "host.docker.internal"
