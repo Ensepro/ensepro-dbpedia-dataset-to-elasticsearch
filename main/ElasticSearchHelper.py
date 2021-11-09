@@ -6,7 +6,7 @@
 """
 
 from elasticsearch import helpers as es_helper
-from services import PalavrasService
+# from services import PalavrasService
 from Constants import *
 from Log import Log
 
@@ -24,9 +24,10 @@ class ElasticSearchHelper(object):
         word = word.replace("-", "_")
         if self.should_use_canonical_word:
             logger.debug("Buscando palavra canônica para palavra '{}'".format(word))
-            canonical_word = PalavrasService.get_canonical_word(word)
-            logger.debug("Palavra canônica buscada. {0} <-> {1}".format(word, canonical_word))
-            return canonical_word
+            # canonical_word = PalavrasService.get_canonical_word(word)
+            # logger.debug("Palavra canônica buscada. {0} <-> {1}".format(word, canonical_word))
+            # return canonical_word
+            raise Exception("should not pass here")
         return word
 
     def _create_element_uri(self, element):
