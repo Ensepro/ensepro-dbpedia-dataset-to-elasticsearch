@@ -24,7 +24,8 @@ SETTINGS[MAX_TRIPLES] = 999999999
 path = "/datasets/"
 ES = Elasticsearch([{'host': ES_HOST, 'port': ES_PORT}])
 
-datasets = [dataset for dataset in os.listdir(path) if dataset.endswith(".ttl")]
+datasets = [dataset for dataset in os.listdir(path) if dataset.endswith(".bz2")]
+datasets.sort()
 
 # total = 0
 # for dataset in datasets:
@@ -42,9 +43,15 @@ datasets = [dataset for dataset in os.listdir(path) if dataset.endswith(".ttl")]
 # print("Total", "&", total)
 is_first = True
 for dataset in datasets:
-    print(dataset)
+    ttlfile = path + dataset.replace(".bz2", "")
+    print(ttlfile)
+    # print("bzip2 -d " + path + "dataset")
+    os.system("bzip2 -d " + path + dataset)
+
     # continue
-    SETTINGS[DATASET] = path + dataset
+    SETTINGS[DATASET] = ttlfile
     es_helper = ElasticSearchHelper(ES, SETTINGS, False, is_first)
     es_helper.load_triples()
     is_first = False
+
+    os.system("rm " + ttlfile)
