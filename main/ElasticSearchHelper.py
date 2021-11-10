@@ -123,3 +123,4 @@ class ElasticSearchHelper(object):
         logger.info("Carregadas {} triplas!".format(triple_number - 1))
         if (len(actions) > 0):
             es_helper.bulk(self.es, actions, request_timeout=60)
+        return triple_number

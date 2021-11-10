@@ -42,6 +42,7 @@ datasets.sort()
 #
 # print("Total", "&", total)
 is_first = True
+triple_number = 0
 for dataset in datasets:
     ttlfile = path + dataset.replace(".bz2", "")
     print(ttlfile)
@@ -51,7 +52,9 @@ for dataset in datasets:
     # continue
     SETTINGS[DATASET] = ttlfile
     es_helper = ElasticSearchHelper(ES, SETTINGS, False, is_first)
-    es_helper.load_triples()
+    triple_number += es_helper.load_triples()
     is_first = False
 
     os.system("rm " + ttlfile)
+
+print("total triples:", triple_number)
